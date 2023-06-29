@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: monitoring-demo-db-lb
+  namespace: infrastructure
+  labels:
+    app: monitoring-demo-db
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 54332
+    targetPort: 5432
+    name: postgres
+  selector:
+    app: monitoring-demo-db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: monitoring-demo-db
+  namespace: infrastructure
+  labels:
+    app: monitoring-demo-db
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+    name: postgres
+  selector:
+    app: monitoring-demo-db
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: monitoring-demo-db
+  namespace: infrastructure
+spec:
+  replicas: 1
+  serviceName: monitoring-demo-db
+  selector:
+    matchLabels:
+      app: monitoring-demo-db
+  template:
+    metadata:
+      labels:
+        app: monitoring-demo-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:11
+          env:
+            - name: POSTGRES_DB
+              value: monitoring-demo
+            - name: POSTGRES_USER
+              value: monitoring-demo
+            - name: POSTGRES_PASSWORD
+              value: monitoring-demo
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: monitoring-demo-db
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+  volumeClaimTemplates:
+    - metadata:
+        name: monitoring-demo-db
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

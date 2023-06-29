@@ -1,0 +1,42 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: monitoring-demo
+  namespace: infrastructure
+  labels:
+    app: prometheus
+    role: service-monitor
+spec:
+  selector:
+    matchLabels:
+      project: monitoring
+  namespaceSelector:
+    matchNames:
+    - default
+  endpoints:
+  - port: http
+    scheme: http
+    path: '/actuator/prometheus'
+    basicAuth:
+      username:
+        name: monitoring-demo-credentials
+        key: username
+      password:
+        name: monitoring-demo-credentials
+        key: password
+    interval: 15s
+    scrapeTimeout: 15s
+    honorLabels: false
+    relabelings:
+    - sourceLabels: [__meta_kubernetes_pod_name]
+      separator: ;
+      regex: (.*)
+      targetLabel: instance
+      replacement: $1
+      action: replace
+    - sourceLabels: [__meta_kubernetes_service_name]
+      separator: ;
+      regex: (.*)
+      targetLabel: application
+      replacement: $1
+      action: replace

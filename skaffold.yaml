@@ -1,0 +1,22 @@
+apiVersion: skaffold/v4beta4
+kind: Config
+metadata:
+  name: firmware-service
+build:
+  artifacts:
+  - image: nexus.esolutions.ro/mstaicu/monitoring-demo
+    jib:
+      args:
+      - clean
+      - -Dmaven.test.skip
+  tagPolicy:
+    envTemplate:
+      template: '{{.USER}}'
+profiles:
+- name: k3s
+  manifests:
+    rawYaml:
+    - deployment/*
+  deploy:
+    kubectl: {}
+    kubeContext: k3s
