@@ -25,18 +25,6 @@ spring:
     open-in-view: false
   jackson:
     property-naming-strategy: com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy
-management:
-  endpoint:
-    health:
-      show-details: when_authorized
-      group:
-        readiness:
-          include:
-            - db
-  endpoints:
-    web:
-      exposure:
-        include: "health,info,prometheus"
 logging:
   level:
     org.springframework: info
