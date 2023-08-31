@@ -1,5 +1,8 @@
 package ro.esolutions.monitoringexample.security
 
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest
+import org.springframework.boot.actuate.health.HealthEndpoint
+import org.springframework.boot.actuate.info.InfoEndpoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.Customizer.withDefaults
@@ -14,6 +17,7 @@ class WebSecurity {
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests {
+                it.requestMatchers(EndpointRequest.to(HealthEndpoint::class.java)).permitAll()
                 it.anyRequest().authenticated()
             }
             .httpBasic(withDefaults())

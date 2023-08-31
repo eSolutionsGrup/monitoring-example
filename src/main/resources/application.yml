@@ -28,3 +28,12 @@ spring:
 logging:
   level:
     org.springframework: info
+management:
+  endpoint:
+    health:
+      show-details: when_authorized
+      group:
+        readiness:
+          include:
+            - db
+            - readinessState

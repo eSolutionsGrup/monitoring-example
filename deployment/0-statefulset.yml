@@ -38,6 +38,23 @@ spec:
             memory: 600Mi
           limits:
             memory: 600Mi
+        livenessProbe:
+          httpGet:
+            port: http
+            path: /actuator/health/liveness
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            port: http
+            path: /actuator/health/readiness
+          periodSeconds: 60
+          failureThreshold: 1
+        startupProbe:
+          httpGet:
+            port: http
+            path: /actuator/health/readiness
+          failureThreshold: 100
+          periodSeconds: 1
         env:
         - name: JAVA_TOOL_OPTIONS
           value: "-XX:MinRAMPercentage=25.0 -XX:MaxRAMPercentage=60.0 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps -XX:+UseG1GC -XX:+UseStringDeduplication -Duser.timezone=Europe/Bucharest -Dfile.encoding=UTF-8 -Djava.security.egd=file:/dev/./urandom"
