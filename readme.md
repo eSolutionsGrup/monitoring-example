@@ -17,7 +17,8 @@ for counter in {1..5}; do http -a user:password monitoring-demo.localhost/db & d
 # initial demo
 
 1. present demo app endpoints - /, /hello, /db
-2. show that, with no probes configured, we have periods of unavailability
+2. start bash requests
+3. show that, with no probes configured, we have periods of unavailability
 
 # health check
 
@@ -107,3 +108,15 @@ for counter in {1..5}; do http -a user:password monitoring-demo.localhost/db & d
    ```kotlin
    it.requestMatchers(EndpointRequest.to(InfoEndpoint::class.java, HealthEndpoint::class.java, PrometheusScrapeEndpoint::class.java)).permitAll()
    ```
+
+
+# getting metrics to prometheus
+
+1. start requests for / and /hello
+2. show servicemonitor
+3. show prometheus & queries
+4. show grafana dashboard
+
+
+
+# check out

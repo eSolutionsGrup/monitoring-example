@@ -1,4 +1,6 @@
 spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 65s
   datasource:
     url: jdbc:postgresql://localhost:54332/monitoring-demo
     username: monitoring-demo
@@ -44,3 +46,5 @@ management:
         - info
         - health
         - prometheus
+server:
+  shutdown: graceful
