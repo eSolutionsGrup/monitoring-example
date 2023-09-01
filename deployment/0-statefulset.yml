@@ -6,7 +6,7 @@ metadata:
   labels:
     app: monitoring-demo
 spec:
-  replicas: 1
+  replicas: 2
   serviceName: monitoring-demo
   selector:
     matchLabels:
@@ -16,6 +16,7 @@ spec:
       labels:
         app: monitoring-demo
     spec:
+      terminationGracePeriodSeconds: 65
       imagePullSecrets:
       - name: nexus-registry-credentials
       containers:
